@@ -4,5 +4,6 @@
 /server/node*
 /clint/node*
 
-server/*.env
+# server*.env
 *.env
+/server/*.env
