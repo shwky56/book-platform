@@ -3,7 +3,7 @@ import Book from "../models.js"
 import path from "path"
 import fs from "fs";
 
-const __dirname = path.resolve(new URL(import.meta.url).pathname);
+const __dirname = path.normalize(new URL(import.meta.url).pathname);
 
 import status from "../../framework/status.js";
 import { Chapter, Search } from "../models.js";
