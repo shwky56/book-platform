@@ -5,3 +5,4 @@
 /clint/node*
 
 /server/*.env
+*.env
