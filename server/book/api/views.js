@@ -12,6 +12,7 @@ class BookAPIView extends APIView {
         this.router.get('/filter', this.Controller.filter.bind(this.Controller));
         this.router.get('/search', this.Controller.searchsave.bind(this.Controller));
         this.router.post('/', fileUpload({ createParentPath: true }), this.Controller.storeAndUpload.bind(this.Controller));
+        this.router.put('/:id', fileUpload({ createParentPath: true }), this.Controller.updateAndUpload.bind(this.Controller));
         return super.setupRoutes()
     }
     getRouter() {

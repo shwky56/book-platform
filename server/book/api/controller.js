@@ -1,12 +1,13 @@
 import { Controller } from "../../framework/index.js";
 import Book from "../models.js"
 import path from "path"
+import fs from "fs";
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 import status from "../../framework/status.js";
+import { Chapter, Search } from "../models.js";
 
-import { Chapter, Search } from "../models.js"
 const chapter = new Chapter();
 const searchModel = new Search();
 
@@ -49,20 +50,21 @@ class BookController extends Controller {
         }
     }
 
-    async storeAndUpload(req, res) {
+    async updateAndUpload(req, res) {
         try {
-            const data = JSON.parse(req.body?.data);
+            let data = null;
+            if(req.body.data){
+                data = JSON.parse(req.body?.data);
+            }
             const book_id = req.params.id;
             const objId = req.params.id;
             if(req.files){
                 onUpload(req, res, objId);
             }
-            
-            const poster_extend = req.files.poster.name.split('.')[1];
-            const book = await Book.update(objId, {
-                ...data,
-            });
-            res.status(201).json({ id: objId });
+            if(data){
+                const book = await Book.update(objId, data);
+            }
+            res.status(201).json({ message: `${this.Model.constructor.name} updated` });
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: "Server error" });
