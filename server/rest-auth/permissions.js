@@ -116,7 +116,7 @@ const isAdminOrSifeMethod =  async (req, res, next) => {
 }
 
 const adminCreateOnly = async (req, res, next) => {
-    if(req.method === "GET" || "POST"){
+    if(req.method === "GET"){
         next();
     }
     else {
