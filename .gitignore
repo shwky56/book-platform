@@ -4,4 +4,4 @@
 /server/node*
 /clint/node*
 
-/server/.env
+/server/.en*
