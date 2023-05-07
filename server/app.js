@@ -9,7 +9,9 @@ import {
   isAdmin,
   isAuth,
   isAdminOrReadOnly,
-  isReaerOrReadOnly
+  isReaerOrReadOnly,
+  isAdminOrSifeMethod,
+  adminCreateOnly,
 } from './rest-auth/permissions.js';
 import pdf from './static-file/view.js'
 const app = express();
@@ -20,12 +22,12 @@ app.use((express.urlencoded({ limit: "30mb", extended: true})));
 app.use('/book', bookView)
 app.use('/users', userRoutes)
 app.use('/pdf', pdf);
-app.use('/api/user', isAuth, UserAPIView.getRouter());
+app.use('/api/user', adminCreateOnly, UserAPIView.getRouter());
 app.use('/api/book', isAdminOrReadOnly, BookAPIView.getRouter());
-app.use('/api/request', RequestAPIView.getRouter());
+app.use('/api/request', isAdminOrSifeMethod, RequestAPIView.getRouter());
 app.use('/api/chapter', ChapterAPIView.getRouter());
 
 
 app.listen(8000, () => {
-  console.log('Server listening on port 3000');
+  console.log('Server listening on port 8000');
 });

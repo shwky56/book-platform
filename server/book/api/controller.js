@@ -18,7 +18,7 @@ const onUpload = (req, res, id) => {
             const filePath = path.join(__dirname, `../../upload/book/${id.toString()}`, id.toString()+ '.' + exptend);
             if (filePath && fs.existsSync(filePath)) {
                 fs.unlinkSync(filePath);
-              }
+            }
             
             files[key].mv(filePath, (error) => {
                 console.log(error);

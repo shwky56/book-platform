@@ -106,10 +106,29 @@ const isAdminOrReadOnly =  async (req, res, next) => {
     }
 }
 
+const isAdminOrSifeMethod =  async (req, res, next) => {
+    if(req.method === "GET" || "POST"){
+        return isReader(req, res, next)
+    }
+    else {
+        return isAdmin(req, res, next);
+    }
+}
+
+const adminCreateOnly = async (req, res, next) => {
+    if(req.method === "GET" || "POST"){
+        next();
+    }
+    else {
+        return isAdmin(req, res, next);
+    }
+}
 
 export {
     isAdmin,
     isAuth,
     isAdminOrReadOnly,
-    isReaerOrReadOnly
+    isReaerOrReadOnly,
+    isAdminOrSifeMethod,
+    adminCreateOnly,
 };
