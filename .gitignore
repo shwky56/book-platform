@@ -3,3 +3,5 @@
 # ndoe moduel
 /server/node*
 /clint/node*
+
+/server/.env
