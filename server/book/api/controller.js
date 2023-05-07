@@ -12,7 +12,7 @@ const chapter = new Chapter();
 const searchModel = new Search();
 
 
-const onUpload = (req, res, id) => {
+const onUpload = async (req, res, id) => {
         const files = req.files;
         Object.keys(files).forEach(key => {
             const exptend = files[key].name.split('.')[1];
@@ -37,7 +37,7 @@ class BookController extends Controller {
         try {
             const data = JSON.parse(req.body.data);
             const objId = await this.Model.create(data);
-            onUpload(req, res, objId);
+            await onUpload(req, res, objId);
             const poster_extend = req.files.poster.name.split('.')[1];
             const book = await Book.update(objId, {
                 pdf_file: `/${objId.toString()}/${objId.toString()}.pdf`,
@@ -59,7 +59,7 @@ class BookController extends Controller {
             const book_id = req.params.id;
             const objId = req.params.id;
             if(req.files){
-                onUpload(req, res, objId);
+                await onUpload(req, res, objId);
             }
             if(data){
                 const book = await Book.update(objId, data);

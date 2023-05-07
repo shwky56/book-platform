@@ -1,4 +1,5 @@
 import express from 'express';
+import busboy from 'busboy'
 import UserAPIView from './user/api/views.js';
 import BookAPIView from './book/api/views.js';
 import RequestAPIView from './request/api/views.js';
@@ -15,6 +16,13 @@ import {
 } from './rest-auth/permissions.js';
 import pdf from './static-file/view.js'
 const app = express();
+
+// app.use(busboy({
+//   limits: {
+//     fileSize: 10 * 1024 * 1024, // 10MB file size limit
+//     fieldSize: 1 * 1024 * 1024, // 1MB field size limit
+//   }
+// }));
 
 app.use('/ss', express.static("upload"));
 app.use((express.json({ limit: "30mb", extended: true})));
