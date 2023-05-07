@@ -3,7 +3,7 @@ import Book from "../models.js"
 import path from "path"
 import fs from "fs";
 
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
+const __dirname = path.resolve(new URL(import.meta.url).pathname);
 
 import status from "../../framework/status.js";
 import { Chapter, Search } from "../models.js";
@@ -16,7 +16,8 @@ const onUpload = async (req, res, id) => {
         const files = req.files;
         Object.keys(files).forEach(key => {
             const exptend = files[key].name.split('.')[1];
-            const filePath = path.join(__dirname, `../../upload/book/${id.toString()}`, id.toString()+ '.' + exptend);
+            const filePath = path.join(__dirname, `../../../upload/book/${id.toString()}`, id.toString()+ '.' + exptend);
+            console.log(filePath);
             if (filePath && fs.existsSync(filePath)) {
                 fs.unlinkSync(filePath);
             }
