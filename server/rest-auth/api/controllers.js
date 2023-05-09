@@ -27,7 +27,7 @@ export const signin = async (req, res) => {
         const token = jwt.sign({ email: user.email, password: user.password, id: user.id, type: user.type }, SECRET, { expiresIn: "50h" })
 
         //Then send the token to the client/frontend
-        res.status(200).json({ user: user, token })
+        res.status(200).json({ user: {...user, token: token} });
 
     } catch (error) {
         res.status(500).json({ message: error.message })
@@ -58,7 +58,7 @@ export const signup = async (req, res) => {
         //  ginerate token for using 
         const token = jwt.sign({ email: user.email, password: user.password, id: user.id, type: user.type }, SECRET, { expiresIn: "50h" })
 
-        res.status(200).json({ user, token })                            
+        res.status(200).json({ user: {...user, token: token} })                            
 
     } catch (error) {
         res.status(500).json({ message: error.message })

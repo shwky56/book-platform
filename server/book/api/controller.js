@@ -3,7 +3,7 @@ import Book from "../models.js"
 import path from "path"
 import fs from "fs";
 
-const __dirname = path.normalize(new URL(import.meta.url).pathname);
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 import status from "../../framework/status.js";
 import { Chapter, Search } from "../models.js";
@@ -12,12 +12,12 @@ const chapter = new Chapter();
 const searchModel = new Search();
 
 
-const onUpload = async (req, res, id) => {
+const onUpload = (req, res, id) => {
+        // console.log(req.files);
         const files = req.files;
         Object.keys(files).forEach(key => {
             const exptend = files[key].name.split('.')[1];
-            const filePath = path.join(__dirname, `../../../upload/book/${id.toString()}`, id.toString()+ '.' + exptend);
-            console.log(filePath);
+            const filePath = path.join(__dirname, `../../upload/book/${id.toString()}`, id.toString()+ '.' + exptend);
             if (filePath && fs.existsSync(filePath)) {
                 fs.unlinkSync(filePath);
             }
@@ -38,7 +38,7 @@ class BookController extends Controller {
         try {
             const data = JSON.parse(req.body.data);
             const objId = await this.Model.create(data);
-            await onUpload(req, res, objId);
+            onUpload(req, res, objId);
             const poster_extend = req.files.poster.name.split('.')[1];
             const book = await Book.update(objId, {
                 pdf_file: `/${objId.toString()}/${objId.toString()}.pdf`,
@@ -60,7 +60,7 @@ class BookController extends Controller {
             const book_id = req.params.id;
             const objId = req.params.id;
             if(req.files){
-                await onUpload(req, res, objId);
+                onUpload(req, res, objId);
             }
             if(data){
                 const book = await Book.update(objId, data);
@@ -95,8 +95,8 @@ class BookController extends Controller {
                 res.status(status.HTTP_404_NOT_FOUND).json({ massage: `${keys[0]} = ${searchQuery[keys[0]]} not found`});
             }
             else{
-
-                searchModel.create({ user_id: req.userId, title: `${searchQuery[keys[0]]}`})
+                if(req.userId)
+                    searchModel.create({ user_id: req.userId, title: `${searchQuery[keys[0]]}`})
                 res.status(status.HTTP_200_OK).json(search)
             }
         } catch (err) {

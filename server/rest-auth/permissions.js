@@ -16,6 +16,15 @@ const auth_erorr = {
     }
 }
 
+const ifNotToken = (req, res) => {
+    if(!req.headers.authorization){
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 const verifyToken = (req, res) => {
     if(!req.headers.authorization){
         res.status(status.HTTP_401_UNAUTHORIZED).json(
@@ -107,7 +116,7 @@ const isAdminOrReadOnly =  async (req, res, next) => {
 }
 
 const isAdminOrSifeMethod =  async (req, res, next) => {
-    if(req.method === "GET" || "POST"){
+    if(req.method === ("GET" || "POST")){
         return isReader(req, res, next)
     }
     else {
@@ -117,7 +126,9 @@ const isAdminOrSifeMethod =  async (req, res, next) => {
 
 const adminCreateOnly = async (req, res, next) => {
     if(req.method === "GET"){
-        next();
+        if(!ifNotToken)
+            verifyToken(req, res);
+        next()
     }
     else {
         return isAdmin(req, res, next);

@@ -4,12 +4,24 @@ import axios from 'axios'
 const API = axios.create({ baseURL: process.env.REACT_APP_API})
 
 API.interceptors.request.use((req) => {
-    if(localStorage.getItem('profile')) {
-        req.headers.authorization = `Bearer ${JSON.parse(localStorage.getItem('profile')).token}`
+    if(localStorage.getItem('user')) {
+        req.headers.authorization = `Bearer ${JSON.parse(localStorage.getItem('user')).token}`
     }
 
     return req
 })
+
+// daefine end point for rest auth
+// most tack { email, password }
+export const signIn =(formData)=> API.post('/rest-auth/signin', formData);
+//  { email, password, confirmPassword, phone}
+export const signUp =(formData)=> API.post('/rest-auth/signup', formData);
+// export const forgot = (formData) => API.post('/users/forgot', formData);
+// export const reset = (formData) => API.post('/users/reset', formData);
+
+
+
+// export const fe
 
 export const fetchUsers =() => API.get('/user')
 export const fetchUser =(id) => API.get(`/user/${id}`)
@@ -17,18 +29,18 @@ export const addUser =( user ) => API.post('/user', user)
 export const updateUser = (id, updatedUser) => API.put(`/user/${id}`, updatedUser)
 export const deleteInvoice =(id) => API.delete(`/invoices/${id}`)
 
-export const fetchBook = (id) => API.get(`/clients/${id}`);
-export const fetchClients = (page) => API.get(`/clients?page=${page}`);
-export const addClient =( client ) => API.post('/clients', client)
-export const updateClient = (id, updatedClient) => API.patch(`/clients/${id}`, updatedClient)
-export const deleteClient =(id) => API.delete(`/clients/${id}`)
+export const fetchBook = (id) => API.get(`/book/${id}`);
+export const fetchBooks = () => API.get(`/book/`);
+export const fetchBookByfilter = ( filde, key ) => API.get(`/book/filter?${ filde }=${ key }`)
+export const fetchBookBySearch = ( filde, value ) => API.get(`/book/search?${ filde }=${ value }`)
+export const addBook =( book ) => API.post('/book', book)
+export const updateBook = (id, updatedBook) => API.patch(`/book/${id}`, updatedBook)
+export const deleteBook =(id) => API.delete(`/book/${id}`)
+
 export const fetchClientsByUser = (searchQuery) => API.get(`/clients/user?searchQuery=${searchQuery.search}`);
 
 
-export const signIn =(formData)=> API.post('/users/signin', formData)
-export const signUp =(formData)=> API.post('/users/signup', formData)
-export const forgot = (formData) => API.post('/users/forgot', formData);
-export const reset = (formData) => API.post('/users/reset', formData);
+
 
 export const fetchProfilesBySearch = (searchQuery) => API.get(`/profiles/search?searchQuery=${searchQuery.search || searchQuery.year || 'none'}`);
 export const fetchProfile = (id) => API.get(`/profiles/${id}`)
