@@ -1,6 +1,9 @@
 import status from "./status.js";
 
-class Controller {
+
+
+
+class IndexController {
     constructor(Model) {
         this.Model = Model;
     }
@@ -14,6 +17,39 @@ class Controller {
             res.status(status.HTTP_500_INTERNAL_SERVER_ERROR).json({ error: "Server error" });
         }
     }
+}
+
+
+class ShowController {
+    constructor(Model) {
+        this.Model = Model;
+    }
+
+    
+
+    async show(req, res) {
+        try {
+            const obj = await this.Model.get(req.params.id);
+            if (!obj) {
+                res.status(status.HTTP_404_NOT_FOUND).json({ error: `${this.Model.constructor.name} not found` });
+            } else {
+                res.status(status.HTTP_200_OK).json(obj);
+            }
+        } catch (error) {
+            console.error(error);
+            res.status(status.HTTP_500_INTERNAL_SERVER_ERROR).json({ error: "Server error" });
+        }
+    }
+}
+
+
+class Controller extends IndexController{
+    constructor(Model) {
+        super(Model)
+        this.Model = Model;
+    }
+
+    
 
     async show(req, res) {
         try {
